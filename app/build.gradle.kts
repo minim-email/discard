@@ -11,6 +11,8 @@ plugins {
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+
+    id("io.gitlab.arturbosch.detekt") version "1.23.4"
 }
 
 repositories {
@@ -29,6 +31,9 @@ dependencies {
 
     // This dependency is used by the application.
     implementation(libs.guava)
+    implementation("io.netty:netty-all:4.1.105.Final")
+
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.4")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
