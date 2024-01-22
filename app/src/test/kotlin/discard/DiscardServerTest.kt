@@ -53,10 +53,14 @@ class DiscardClient {
         )
     }
 
-    fun connect(serverHost: String, serverPort: Int, message: String) {
+    fun connect(serverHost: String, serverPort: Int) {
         future = bootstrap.connect(serverHost, serverPort)
             .sync()
 
+        return
+    }
+
+    fun send(message: String) {
         val bytes: ByteBuf = Unpooled.copiedBuffer(
             message,
             StandardCharsets.UTF_8,
@@ -77,12 +81,14 @@ class DiscardClient {
 class DiscardServerTest {
     @Test fun discardServerIsUp() {
         /*
-         * A Discard server is up if it accepts connections
+         * A Discard server is up if it accepts connections and receives data.
          */
 
         val client = DiscardClient()
 
-        client.connect("localhost", 2525, "Hello, Server!")
+        client.connect("localhost", 2509)
+
+        client.send("HELO server\n")
 
         client.shutdown()
 
