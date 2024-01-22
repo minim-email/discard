@@ -26,9 +26,10 @@ class DiscardClientHandler : ChannelInboundHandlerAdapter() {
 
 class DiscardClientSocketInitialiser : ChannelInitializer<SocketChannel>() {
     override fun initChannel(channel: SocketChannel) {
-        channel.pipeline().addLast(
-            DiscardClientHandler(),
-        )
+        channel.pipeline()
+            .addLast(
+                DiscardClientHandler(),
+            )
 
         return
     }
@@ -42,15 +43,15 @@ class DiscardClient {
     lateinit var future: ChannelFuture
 
     init {
+        val handler = DiscardClientSocketInitialiser()
+
         bootstrap.group(eventLoopGroup)
 
         bootstrap.channel(NioSocketChannel::class.java)
 
         bootstrap.option(ChannelOption.SO_KEEPALIVE, true)
 
-        bootstrap.handler(
-            DiscardClientSocketInitialiser(),
-        )
+        bootstrap.handler(handler)
     }
 
     fun connect(serverHost: String, serverPort: Int) {
