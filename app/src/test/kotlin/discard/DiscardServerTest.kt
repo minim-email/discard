@@ -15,7 +15,7 @@ import io.netty.channel.socket.nio.NioSocketChannel
 import java.nio.charset.StandardCharsets
 import kotlin.test.Test
 
-class DiscardClientHandler : ChannelInboundHandlerAdapter() {
+private class DiscardClientHandler : ChannelInboundHandlerAdapter() {
     override fun channelRead(
         context: ChannelHandlerContext,
         message: kotlin.Any,
@@ -24,7 +24,8 @@ class DiscardClientHandler : ChannelInboundHandlerAdapter() {
     }
 }
 
-class DiscardClientSocketInitialiser : ChannelInitializer<SocketChannel>() {
+private class DiscardClientSocketInitialiser :
+    ChannelInitializer<SocketChannel>() {
     override fun initChannel(channel: SocketChannel) {
         channel.pipeline()
             .addLast(
