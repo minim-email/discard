@@ -26,6 +26,7 @@ private class DiscardClientHandler : ChannelInboundHandlerAdapter() {
 
 private class DiscardClientSocketInitialiser :
     ChannelInitializer<SocketChannel>() {
+
     override fun initChannel(channel: SocketChannel) {
         channel.pipeline()
             .addLast(
@@ -81,18 +82,31 @@ class DiscardClient {
 }
 
 class DiscardServerTest {
+    companion object {
+        const val SERVER_HOST = "localhost"
+        const val SERVER_PORT = 2509
+
+        const val TEST_MESSAGE = "HELO server\n"
+    }
+
     @Test fun discardServerIsUp() {
         /*
          * A Discard server is up if it accepts connections and receives data.
          */
 
+        val server = DiscardServer()
+
         val client = DiscardClient()
 
-        client.connect("localhost", 2509)
+        server.listenAndServe(SERVER_HOST, SERVER_PORT)
 
-        client.send("HELO server\n")
+        client.connect(SERVER_HOST, SERVER_PORT)
+
+        client.send(TEST_MESSAGE)
 
         client.shutdown()
+
+        server.shutdown()
 
         return
     }
